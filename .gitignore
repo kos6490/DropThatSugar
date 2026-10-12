@@ -57,3 +57,23 @@ ExportedObj/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ===== AI 에이전트 설정·프롬프트 =====
+# Claude Code
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+# Codex 등 공통
+AGENTS.md
+.codex/
+# Gemini
+GEMINI.md
+.gemini/
+# Cursor
+.cursor/
+.cursorrules
+# GitHub Copilot
+.github/copilot-instructions.md
+# Windsurf
+.windsurfrules
+.windsurf/
