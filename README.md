@@ -188,7 +188,17 @@ git mergetool
 
 ## 4. 협업 규칙
 
-- `main` 직접 push 불가, 브랜치 → PR → 팀원 1명 승인 → Merge
+- **`main` 직접 push 불가**, `dev` → `main`으로 PR (배포 시점) → 팀원 1명 승인 → Merge
+- **`dev` 직접 push 불가**, 작업 브랜치(`feat`, `fix` 등) → `dev`로 PR → 팀원 1명 승인 → Merge
+- 브랜치 전략: `main`은 항상 배포 가능한 상태 유지, `dev`는 잘 동작하는 개발 코드 상태 유지, `dev`에서 `feat`, `fix` 등 브랜치 생성 후 기능 추가, 버그 수정 등 작업 수행
+
+아래 명령어로 'dev'에서 작업 브랜치를 새로 만들어 개발 진행
+
+  ```bash
+  git switch dev                  # dev 브랜치로 이동
+  git pull                        # 최신 dev 받기
+  git switch -c <작업 브랜치명>    # dev에서 작업 브랜치 생성
+  ```
 - 같은 씬(Scene)을 동시에 두 명이 수정하지 않기, 작업 전 알리기
 - 파일 이동·이름 변경·삭제는 Unity 에디터 안에서 (`.meta` 때문)
 - Unity 버전·패키지 변경은 합의 후 단독 PR (다른 작업과 섞지 않고 해당 변경만 담은 PR, 팀원의 에디터·패키지 버전이 같아야 함)
