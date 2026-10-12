@@ -95,7 +95,8 @@ for f in $changed; do
 done
 
 # --- 6. Unity 버전 변경 ---
-for f in $changed; do
+modified=$(git diff --cached --name-only --diff-filter=M)
+for f in $modified; do
   if [ "$f" = "ProjectSettings/ProjectVersion.txt" ] && [ "${ALLOW_UNITY_UPGRADE:-0}" != "1" ]; then
     red "[UNITY] ProjectVersion.txt가 변경되었습니다. 의도치 않은 Unity 버전 변경일 수 있습니다."
     warn "        되돌리기: git restore --staged --worktree ProjectSettings/ProjectVersion.txt"
