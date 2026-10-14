@@ -71,3 +71,53 @@ Assets/_Project/
 - 이벤트 로그는 주행 단위 파일에 JSON Lines(`.jsonl`) 형식으로 한 줄씩 추가만 한다.
 - 진행도·설정처럼 덮어쓰는 파일은 임시 파일에 쓴 뒤 교체한다.
 - JSON 직렬화는 Infrastructure에서만 한다. 역직렬화용 DTO는 Infrastructure에 두고 `[Preserve]`를 붙인 뒤, 도메인 객체로 변환해 넘긴다.
+
+## 7. 테스트
+
+### 에디터에서 실행
+
+`Window > General > Test Runner`를 열고 EditMode 탭에서 `Run All` 또는 원하는 테스트를 실행한다.
+
+### 명령줄(batchmode) 실행
+
+에디터에서 프로젝트를 열고 있으면 먼저 닫는다.
+
+```bash
+"<UNITY_EXE>" -batchmode -projectPath "<PROJECT_PATH>" \
+  -runTests -testPlatform EditMode \
+  -testResults "<PROJECT_PATH>/TestResults/editmode.xml" \
+  -logFile -
+```
+
+- `<UNITY_EXE>` (Hub 기본 설치 경로 기준)
+  - macOS: `/Applications/Unity/Hub/Editor/6000.3.26f1/Unity.app/Contents/MacOS/Unity`
+  - Windows: `C:/Program Files/Unity/Hub/Editor/6000.3.26f1/Editor/Unity.exe`
+- `-quit`은 붙이지 않는다. 테스트가 끝나기 전에 종료된다.
+- 결과 파일이 생기는 `TestResults/`는 `.gitignore`에 포함되어 있다.
+
+### 테스트 어셈블리 추가
+
+1. Project 창에서 `Assets/_Project/Tests/EditMode/`를 선택하고 `Assets > Create > Testing > Tests Assembly Folder`를 실행한다.
+2. 생성된 폴더 이름을 계층 이름으로 바꾼다. 예: `App`
+3. asmdef 파일 이름을 `DropThatSugar.{계층}.Tests.asmdef`로 바꾼다. 이름 변경은 에디터에서 한다(`.meta` 유지).
+4. asmdef 내용을 아래처럼 고친다. `optionalUnityReferences`는 템플릿 그대로 둔다.
+   - `name`, `rootNamespace`: `DropThatSugar.{계층}.Tests`
+   - `references`: 테스트 대상 계층과, 그 계층이 쓰는 타입의 어셈블리
+   - `includePlatforms: ["Editor"]` 추가 (메뉴 템플릿은 Editor 전용이 아니어서 그대로 두면 PlayMode 테스트 어셈블리가 된다)
+
+```json
+{
+    "name": "DropThatSugar.App.Tests",
+    "rootNamespace": "DropThatSugar.App.Tests",
+    "references": [
+        "DropThatSugar.App",
+        "DropThatSugar.Domain"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}
+```
